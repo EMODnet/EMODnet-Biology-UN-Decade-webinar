@@ -3,7 +3,11 @@ FROM rocker/r2u:jammy AS r2u-stage
 
 # Pre-install R packages using r2u
 RUN Rscript -e "install.packages(c('pak'))" && \
-    Rscript -e "pak::pkg_install(c('EMODnet/emodnet.wfs', 'EMODnet/EMODnetWCS', 'lifewatch/eurobis', 'ropensci/rerddap'))"
+    Rscript -e "pak::pkg_install(c( \
+    	'EMODnet/emodnet.wfs@d3c1ad2d40609fc4f64c80fb96bc20ce15d70594', \
+    	'EMODnet/EMODnetWCS@039fa1fa196a5ff28dffa15d2c8f0f1197f8558f', \
+    	'lifewatch/eurobis@c3d4690a07ed5f735e91b23db25f6b26638852c1', \
+    	'ropensci/rerddap@v1.1.0-1'))"
 
 # Stage 2: Start with rocker/binder for IDE and Jupyter
 FROM rocker/binder:4.4 AS final-stage
