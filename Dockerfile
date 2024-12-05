@@ -1,38 +1,29 @@
-# Stage 1: Install r2u system and R package dependencies
-FROM rocker/r2u:jammy AS r2u-stage
+FROM rocker/binder:4.4.1
 
-# Pre-install R packages using r2u
-RUN Rscript -e "install.packages(c('pak'))" && \
-    Rscript -e "pak::pkg_install(c( \
-    	'EMODnet/emodnet.wfs@d3c1ad2d40609fc4f64c80fb96bc20ce15d70594', \
-    	'EMODnet/EMODnetWCS@039fa1fa196a5ff28dffa15d2c8f0f1197f8558f', \
-    	'lifewatch/eurobis@c3d4690a07ed5f735e91b23db25f6b26638852c1', \
-    	'ropensci/rerddap@v1.1.0-1'))"
+## Declares build arguments
+ARG NB_USER
+ARG NB_UID
 
-# Stage 2: Start with rocker/binder for IDE and Jupyter
-FROM rocker/binder:4.4 AS final-stage
-
-# Copy installed R packages and configuration from r2u-stage
-COPY --from=r2u-stage /usr/local/lib/R /usr/local/lib/R
-COPY --from=r2u-stage /usr/lib/R /usr/lib/R
-COPY --from=r2u-stage /var/lib/apt/lists /var/lib/apt/lists
-COPY --from=r2u-stage /etc/apt/sources.list /etc/apt/sources.list
-COPY --from=r2u-stage /usr/bin/apt-get /usr/bin/apt-get
-
-# Switch to root user for system-level installations
+## Copies your repo files into the Docker Container
 USER root
+
+## Manually install system dependency
+RUN apt update && apt install -y libsecret-1-dev
+
 COPY . ${HOME}
+## Enable this to copy files from the binder subdirectory
+## to the home, overriding any existing files.
+## Useful to create a setup on binder that is different from a
+## clone of your repository
+## COPY binder ${HOME}
+RUN chown -R ${NB_USER} ${HOME}
 
-# Update and upgrade system packages
-RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends libsecret-1-dev && apt-get clean && rm -rf /var/lib/apt/lists/*
+## Become normal user again
+USER ${NB_USER}
 
-# Ensure user permissions for the R library
-RUN chown -R rstudio:rstudio /usr/local/lib/R /usr/lib/R
+## Run an install.R script, if it exists.
+RUN if [ -f install.R ]; then R --quiet -f install.R; fi
 
-# Switch back to the non-root user for normal use
-USER rstudio
-WORKDIR /home/rstudio
-
-# Set the command to start JupyterLab
-CMD ["jupyter", "lab", "--ip=0.0.0.0", "--no-browser", "--allow-root"]
-
+# Use locally: 
+# $ docker build -t binder-unwebinar .
+# $ docker run --rm -ti -p 8888:8888 binder-unwebinar
