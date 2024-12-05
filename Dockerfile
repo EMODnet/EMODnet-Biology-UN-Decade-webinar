@@ -23,7 +23,3 @@ USER ${NB_USER}
 
 ## Run an install.R script, if it exists.
 RUN if [ -f install.R ]; then R --quiet -f install.R; fi
-
-# Use locally: 
-# $ docker build -t binder-unwebinar .
-# $ docker run --rm -ti -p 8888:8888 binder-unwebinar
