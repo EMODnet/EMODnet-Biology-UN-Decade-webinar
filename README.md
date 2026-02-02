@@ -2,7 +2,7 @@
 
 [![Funding](https://img.shields.io/static/v1?label=powered+by&message=emodnet.eu&labelColor=004494&color=ffffff)](http://emodnet.eu/) [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/EMODnet/EMODnet-Biology-UN-Decade-webinar/HEAD)
 
-This repository contains [Jupyter notebooks](./notebooks/) used for the **EMODnet Biology** session of the webinar on data for the [UN Ocean Decade – A European focus](https://eudata4oceandecade.eu/) on **15 January 2025**. These notebooks aim to show how data from EMODnet Biology an contribute to the [UN Ocean Decade goals](https://oceandecade.org/challenges/) with focus on the **Challenge 3** and **Challenge 4**, related to food security and ocean economy respectively
+This repository contains [Jupyter notebooks](./notebooks/) used for the **EMODnet Biology** session of the webinar on data for the [UN Ocean Decade – A European focus](https://eudata4oceandecade.eu/) on **15 January 2025**. These notebooks aim to show how data from EMODnet Biology can contribute to the [UN Ocean Decade goals](https://oceandecade.org/challenges/) with focus on the **Challenge 3** and **Challenge 4**, related to food security and ocean economy respectively
 
 
 
